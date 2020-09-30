@@ -1,14 +1,13 @@
-package com.taomei.ideal.dao;
+package com.taomei.ideal.common;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DaoApplication {
+public class CommonApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DaoApplication.class, args);
+        SpringApplication.run(CommonApplication.class, args);
     }
 
 }
