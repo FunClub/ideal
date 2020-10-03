@@ -1,6 +1,7 @@
 package com.taomei.ideal.service.user;
 
-import com.taomei.ideal.web.dto.UserDto;
+import com.taomei.ideal.common.dto.UserDTO;
+import com.taomei.ideal.common.exception.BusinessException;
 
 /**
  * <p>
@@ -12,5 +13,5 @@ import com.taomei.ideal.web.dto.UserDto;
  */
 public interface RegisterService{
 
-    boolean register(UserDto userDTO);
+    boolean register(UserDTO userDTO) throws BusinessException;
 }

@@ -8,7 +8,8 @@ package com.taomei.ideal.common.constant;
 public enum HttpStatusEnum {
     OK(200, "成功"),
     BAD_REQUEST(400, "请求错误"),
-    INTERNAL_SERVER_ERROR(500, "服务器内部错误")
+    INTERNAL_SERVER_ERROR(500, "服务器内部错误"),
+    BUSINESS_ERROR(599, "业务异常")
     ;
 
     private Integer status;

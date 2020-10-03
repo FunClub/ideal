@@ -1,7 +1,8 @@
 package com.taomei.ideal.dao.user.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.taomei.ideal.web.dto.UserDto;
+
+import com.taomei.ideal.common.dto.UserDTO;
 import com.taomei.ideal.common.util.DtoUtils;
 import com.taomei.ideal.dao.user.UserDao;
 import com.taomei.ideal.dao.user.entity.UserDO;
@@ -26,7 +27,7 @@ public class UserDaoImpl extends ServiceImpl<UserMapper, UserDO> implements User
     private UserMapper userMapper;
 
     @Override
-    public int insertUser(UserDto userDto) {
+    public int insertUser(UserDTO userDto) {
         return userMapper.insert(DtoUtils.copy(userDto,new UserDO()));
     }
 }

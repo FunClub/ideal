@@ -1,4 +1,4 @@
-package com.taomei.ideal.common.util;
+package com.taomei.ideal.dao.util;
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.taomei.ideal.common.util.StringUtils;
 
 import java.util.Scanner;
 

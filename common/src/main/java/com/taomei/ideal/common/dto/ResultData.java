@@ -1,4 +1,4 @@
-package com.taomei.ideal.web.dto;
+package com.taomei.ideal.common.dto;
 
 import lombok.Data;
 

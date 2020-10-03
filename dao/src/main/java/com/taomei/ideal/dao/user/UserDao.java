@@ -1,7 +1,8 @@
 package com.taomei.ideal.dao.user;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.taomei.ideal.web.dto.UserDto;
+
+import com.taomei.ideal.common.dto.UserDTO;
 import com.taomei.ideal.dao.user.entity.UserDO;
 
 /**
@@ -14,5 +15,5 @@ import com.taomei.ideal.dao.user.entity.UserDO;
  */
 public interface UserDao extends IService<UserDO> {
 
-    int insertUser(UserDto userDto);
+    int insertUser(UserDTO userDto);
 }

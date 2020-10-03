@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:32769/demo?characterEncoding=UTF-8
+    #schema: [classpath:sql/t_user.sql] #数据库操作
+    #data: [classpath:sql/t_user_data.sql] #插入数据
+    #initialization-mode: always #总是初始化数据库
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      stat-view-servlet: #druid后台
+        enabled: true
+        url-pattern: /druid/* #进入后台请求：localhost:8080/druid
+        login-username: root
+        login-password: root
+      filter: #监控台配置
+        slf4j:
+          enabled: true
+        wall: #防火墙
+          enabled: true
+        stat: #统计
+          enabled: true

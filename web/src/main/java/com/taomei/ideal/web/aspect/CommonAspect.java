@@ -1,7 +1,8 @@
 package com.taomei.ideal.web.aspect;
 
 import com.taomei.ideal.common.constant.HttpStatusEnum;
-import com.taomei.ideal.web.dto.ResultData;
+import com.taomei.ideal.common.validation.GroupValidated;
+import com.taomei.ideal.common.dto.ResultData;
 import io.swagger.annotations.ApiOperation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -12,21 +13,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
-import javax.validation.executable.ExecutableValidator;
+import javax.validation.Validator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 
 
 /*
@@ -42,7 +37,7 @@ public class CommonAspect {
     private Logger logger;
 
     // 异常处理和数据封装的连接点
-    @Pointcut("execution(* com.taomei.ideal.web.*Controller.*(..))")
+    @Pointcut("execution(* com.taomei.ideal.web.*.*Controller.*(..))")
     public void exceptionHandleAndDataEncapsulation() {
     }
 
@@ -59,7 +54,8 @@ public class CommonAspect {
     public ResultData exceptionHandleAndDataEncapsulation(ProceedingJoinPoint joinPoint) {
 
         //***日志输出***
-        logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
+        Object targetObject = joinPoint.getTarget();
+        logger = LoggerFactory.getLogger(CommonAspect.class);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Object[] argsValues = joinPoint.getArgs();
@@ -74,36 +70,35 @@ public class CommonAspect {
             methodOperation = apiOperation.value();
             sb.append("开始执行【").append(methodOperation).append("】,");
             for (String parameterName : parameterNames) {
-                sb.append(parameterName).append("={},");
+                sb.append(parameterName).append("={}, ");
             }
             logger.info(sb.toString(), argsValues);
         } else {
             //没有给控制器指定@ApiOperation
-            logger.info("开始执行【" + targetMethod.getName() + "】,param={}", argsValues);
+            methodOperation = targetMethod.getName();
+            logger.info("开始执行【" + methodOperation + "】, param={}", argsValues);
         }
 
         //***控制器参数参数校验***
-
-        //获取分组校验group
         Parameter[] parameters = targetMethod.getParameters();
-        List<Class<?>> groups = new ArrayList<>();
-        Arrays.asList(parameters).forEach((e) -> {
-            Annotation[] annotations = e.getDeclaredAnnotations();
-            Arrays.asList(annotations).forEach((d) -> {
-                if (d instanceof Validated) {
-                    Class<?>[] classes = ((Validated) d).value();
-                    groups.addAll(Arrays.asList(classes));
-                }
-            });
-        });
-
-        //进行参数验证
-        ExecutableValidator validator = Validation.buildDefaultValidatorFactory().getValidator().forExecutables();
-        Set<ConstraintViolation<Object>> constraintViolations = validator.
-                validateParameters(joinPoint.getTarget(), targetMethod, argsValues, groups.toArray(new Class<?>[]{}));
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         StringBuilder paramSB = new StringBuilder();
-        constraintViolations.forEach(e -> paramSB.append(e.getPropertyPath()).append(e.getMessage()).append(","));
-        Object result = null;
+        Class<?>[] groups;
+        for (int i = 0; i < parameters.length; i++) {
+            Annotation[] annotations = parameters[i].getDeclaredAnnotations();
+            for (int j = 0; j < annotations.length; j++) {
+                if (annotations[j] instanceof GroupValidated) {//分组验证
+                    groups = ((GroupValidated) annotations[j]).value();
+                    validator.validate(argsValues[i], groups)
+                            .forEach(f -> paramSB.append(f.getPropertyPath()).append(f.getMessage()).append(","));
+                }else {//默认验证
+                    validator.validate(argsValues[i])
+                            .forEach(f -> paramSB.append(f.getPropertyPath()).append(f.getMessage()).append(","));
+                }
+            }
+        }
+
+        Object result;
         ResultData view = new ResultData();
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
 
@@ -113,7 +108,7 @@ public class CommonAspect {
             view.setMessage(paramSB.toString());
             view.setStatus(HttpStatusEnum.BAD_REQUEST.getStatus());
             response.setStatus(HttpStatusEnum.BAD_REQUEST.getStatus());
-            logger.error("执行【" + methodOperation + "】失败，参数不合法");
+            logger.error("执行【" + methodOperation + "】失败, 原因：参数不合法");
             return view;
         }
 
@@ -124,7 +119,7 @@ public class CommonAspect {
             view.setMessage(throwable.getMessage());
             view.setStatus(HttpStatusEnum.INTERNAL_SERVER_ERROR.getStatus());
             response.setStatus(HttpStatusEnum.INTERNAL_SERVER_ERROR.getStatus());
-            logger.error("失败执行【" + methodOperation + "】，原因：" + throwable.getMessage());
+            logger.error("失败执行【" + methodOperation + "】, 原因：" + throwable.getMessage());
             throwable.printStackTrace();
             return view;
         }
@@ -132,7 +127,7 @@ public class CommonAspect {
         view.setMessage(HttpStatusEnum.OK.getDescription());
         view.setStatus(HttpStatusEnum.OK.getStatus());
         stopWatch.stop();
-        logger.info("成功执行【" + methodOperation + "】，耗时："+stopWatch.getTotalTimeSeconds()+"秒");
+        logger.info("成功执行【" + methodOperation + "】, 耗时：" + stopWatch.getTotalTimeSeconds() + "秒");
 
         return view;
     }
@@ -145,6 +140,7 @@ public class CommonAspect {
 
     /**
      * 分页服务的统一处理，包括开启分页，清理分页等
+     *
      * @param joinPoint 连接点
      * @return com.github.pagehelper.Page<Object>类型的数据
      * @author 刘滔(2389599310 @ qq.com)
@@ -155,4 +151,6 @@ public class CommonAspect {
 
         return null;
     }
+
+
 }
