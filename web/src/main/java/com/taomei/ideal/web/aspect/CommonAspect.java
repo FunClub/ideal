@@ -116,7 +116,7 @@ public class CommonAspect {
         try {
             result = joinPoint.proceed();
         } catch (Throwable throwable) {//调用失败
-            view.setMessage(throwable.getMessage());
+            view.setMessage(HttpStatusEnum.INTERNAL_SERVER_ERROR.getDescription());
             view.setStatus(HttpStatusEnum.INTERNAL_SERVER_ERROR.getStatus());
             response.setStatus(HttpStatusEnum.INTERNAL_SERVER_ERROR.getStatus());
             logger.error("失败执行【" + methodOperation + "】, 原因：" + throwable.getMessage());
@@ -136,21 +136,4 @@ public class CommonAspect {
     @Pointcut("execution(* com.taomei.ideal.web..*.*Page(..))")
     public void pagingService() {
     }
-
-
-    /**
-     * 分页服务的统一处理，包括开启分页，清理分页等
-     *
-     * @param joinPoint 连接点
-     * @return com.github.pagehelper.Page<Object>类型的数据
-     * @author 刘滔(2389599310 @ qq.com)
-     * @date 2020/9/22 4:49 下午
-     */
-    @Around(value = "pagingService()")
-    public Object pagingService(ProceedingJoinPoint joinPoint) {
-
-        return null;
-    }
-
-
 }

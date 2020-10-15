@@ -1,5 +1,7 @@
-package com.taomei.ideal.common.util;
+package com.taomei.ideal.dao.util;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
@@ -17,8 +19,23 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class DataTranslateUtils {
 
+    public static <T, E> PageInfo<E> copyToPageInfo(List<T> sourcePage, E target){
+        if(sourcePage instanceof Page){
+            Page<E> targetPage = new Page<>();
+            //拷贝分页信息
+            copy(sourcePage,targetPage);
+            //拷贝集合元素
+            List<E> targetList = copyToList(sourcePage, target);
+            PageInfo<E> pageInfo = new PageInfo<>(targetPage);
+            pageInfo.setList(targetList);
+            return pageInfo;
+        }
+        return new PageInfo<>();
+    }
+
     /**
      * 将原始对象中的数据拷贝到目标对象
+     *
      * @param source 原始对象
      * @param target 目标对象
      * @return 目标对象
@@ -32,6 +49,7 @@ public class DataTranslateUtils {
 
     /**
      * 原始对象集合生成目标类型的对象集合
+     *
      * @param source 原始对象集合
      * @param target 目标对象
      * @return 目标对象集合
@@ -48,6 +66,5 @@ public class DataTranslateUtils {
         });
         return targetList;
     }
-
 
 }

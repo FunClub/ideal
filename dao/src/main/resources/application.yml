@@ -2,7 +2,7 @@ spring:
   datasource:
     username: root
     password: root
-    url: jdbc:mysql://localhost:32769/demo?characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/ideal?characterEncoding=UTF-8&serverTimezone=GMT%2B8
     #schema: [classpath:sql/t_user.sql] #数据库操作
     #data: [classpath:sql/t_user_data.sql] #插入数据
     #initialization-mode: always #总是初始化数据库
@@ -16,7 +16,11 @@ spring:
       filter: #监控台配置
         slf4j:
           enabled: true
+          statement-executable-sql-log-enable: true
         wall: #防火墙
           enabled: true
         stat: #统计
           enabled: true
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

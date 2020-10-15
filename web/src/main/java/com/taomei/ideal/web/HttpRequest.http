@@ -1,0 +1,21 @@
+GET http://localhost:8080/user/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "123"
+
+}
+
+###
+PUT http://localhost:8080/user/
+Content-Type: application/json
+
+{
+  "username": "123",
+  "userPassword": "3"
+}
+
+###
+
+

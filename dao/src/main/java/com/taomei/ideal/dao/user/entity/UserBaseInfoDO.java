@@ -1,32 +1,35 @@
-package com.taomei.ideal.common.dto;
+package com.taomei.ideal.dao.user.entity;
 
-import com.taomei.ideal.common.validation.Insert;
+import java.time.LocalDateTime;
+import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
-
 /**
- * @author 刘滔(2389599310 @ qq.com)
- * @version v1.0
- * @date 2020/9/26 10:21 下午
+ * <p>
+ * 
+ * </p>
+ *
+ * @author 刘滔
+ * @since 2020-10-04
  */
 @Data
-@ApiModel(value="UserDTO", description="")
-public class UserDTO extends QueryPageDTO {
+@ApiModel(value="UserBaseInfo对象", description="")
+@TableName("user_base_info")
+public class UserBaseInfoDO implements Serializable {
+
     private static final long serialVersionUID=1L;
 
     @ApiModelProperty(value = "用户id")
-    private Integer id;
+    private String id;
 
     @ApiModelProperty(value = "用户名")
-    @NotEmpty(groups = Insert.class)
     private String username;
 
     @ApiModelProperty(value = "密码")
-    @NotEmpty(groups = Insert.class)
     private String userPassword;
 
     @ApiModelProperty(value = "年龄")

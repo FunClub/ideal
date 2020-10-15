@@ -1,6 +1,9 @@
 package com.taomei.ideal.dao.configuration;
 
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -11,5 +14,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @MapperScan("com.taomei.ideal.dao")
 public class MybatisConfiguration {
+
 
 }

@@ -1,7 +1,11 @@
 package com.taomei.ideal.service.user;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.taomei.ideal.common.dto.UserDTO;
 import com.taomei.ideal.common.exception.BusinessException;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,4 +18,6 @@ import com.taomei.ideal.common.exception.BusinessException;
 public interface RegisterService{
 
     boolean register(UserDTO userDTO) throws BusinessException;
+
+    PageInfo<UserDTO> query(UserDTO userDTO);
 }

@@ -22,13 +22,14 @@ public class ModuleGenerateUtils {
 
         //全局配置
         GlobalConfig globalConfig = new GlobalConfig();
-        globalConfig.setOutputDir(System.getProperty("user.dir") + "/common/src/main/java");//定位到common模块
+        globalConfig.setOutputDir(System.getProperty("user.dir") + "/dao/src/main/java");//定位到dao模块
         globalConfig.setAuthor("刘滔");//作者
         globalConfig.setOpen(false);//创建完毕后是否打开文件夹
+        globalConfig.setSwagger2(true);//开启swagger2
 
         //数据源配置
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
-        dataSourceConfig.setUrl("jdbc:mysql://localhost:3307/demo?useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dataSourceConfig.setUrl("jdbc:mysql://localhost:3306/ideal?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8");
         dataSourceConfig.setDriverName("com.mysql.jdbc.Driver");
         dataSourceConfig.setUsername("root");
         dataSourceConfig.setPassword("root");
@@ -37,7 +38,7 @@ public class ModuleGenerateUtils {
         //包信息配置
         PackageConfig packageConfig = new PackageConfig();
         packageConfig.setModuleName(scanner("模块名"));//控制台输入模块名
-        packageConfig.setParent("com.taomei.ideal.common");//生成的模块在此包下
+        packageConfig.setParent("com.taomei.ideal.dao");//生成的模块在此包下
 
         //生成策略配置
         StrategyConfig strategyConfig = new StrategyConfig();
