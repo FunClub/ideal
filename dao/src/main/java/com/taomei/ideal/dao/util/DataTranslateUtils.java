@@ -19,6 +19,13 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class DataTranslateUtils {
 
+    /**
+     * 将com.github.pagehelper.Page拷贝生成类型为E的PageInfo
+     * @param sourcePage 数据来源
+     * @return target 目标类型
+     * @author 刘滔(2389599310@qq.com)
+     * @date 2020/10/16 8:23 上午
+     */
     public static <T, E> PageInfo<E> copyToPageInfo(List<T> sourcePage, E target){
         if(sourcePage instanceof Page){
             Page<E> targetPage = new Page<>();
